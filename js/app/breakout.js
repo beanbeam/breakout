@@ -135,18 +135,23 @@ define(['config', 'materials', 'three'], function(config, materials) {return{
 
       render.vTotalDelta += delta;
       if (render.vCheckCount == 0) {
-        var deltaX = render.lastVLoc == null ? 0 : paddle.position.x - render.lastVLoc.x;
-        var deltaY = render.lastVloc == null ? 0 : paddle.position.y - render.lastVLoc.y;
+        var deltaX = 0;
+        var deltaY = 0;
+
+        if (render.lastVLoc !== null) {
+          deltaX = paddle.position.x - render.lastVLoc.x;
+          deltaY = paddle.position.y - render.lastVLoc.y;
+        }
 
         paddle.velocity = new THREE.Vector3(
-            10* deltaX / render.vTotalDelta,
-            10*deltaY / render.vTotalDelta,
+            Math.max(-0.2, Math.min(0.2, 8 * deltaX / render.vTotalDelta)),
+            Math.max(-0.2, Math.min(0.2, 8 * deltaY / render.vTotalDelta)),
             0);
 
         render.lastVLoc = paddle.position;
         render.vTotalDelta = 0;
       }
-      render.vCheckCount = (render.vCheckCount + 1) % 6;
+      render.vCheckCount = (render.vCheckCount + 1) % 3;
 
       renderer.render(scene, camera);
     }
@@ -187,6 +192,7 @@ define(['config', 'materials', 'three'], function(config, materials) {return{
         if (Math.abs(xDiff) < xColl && Math.abs(yDiff) < yColl) {
           ball.velocity.z = -Math.abs(ball.velocity.z);
           ball.velocity.add(paddle.velocity);
+          console.log(paddle.velocity);
           ball.velocity.z -= 0.03;
         } else {
           gameOver = true;
