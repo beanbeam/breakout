@@ -94,8 +94,6 @@ define(['config', 'materials', 'three'], function(config, materials) {return{
       renderer.setSize(size, size);
     }
 
-    mouseMoved.lastTime = null;
-    mouseMoved.lastLocation = null;
     function mouseMoved(evt) {
       if (gameOver) {return}
       var bounds = canvas.getBoundingClientRect();
@@ -105,10 +103,11 @@ define(['config', 'materials', 'three'], function(config, materials) {return{
       var maxX = 10 - paddle.geometry.width / 2;
       var maxY = 10 - paddle.geometry.height / 2;
 
-      lastLocation = [
+      var newPosition = new THREE.Vector3(
         Math.max(-maxX, Math.min(x, maxX)),
-        Math.max(-maxY, Math.min(y, maxY))];
-      paddle.position.set(lastLocation[0], lastLocation[1], 0.1);
+        Math.max(-maxY, Math.min(y, maxY)),
+        0.1);
+      paddle.position = newPosition;
     }
 
     function currentTimeMillis() {
@@ -117,7 +116,9 @@ define(['config', 'materials', 'three'], function(config, materials) {return{
 
     render.startTime = null;
     render.lastTime = null;
-    
+    render.lastVLoc = null;
+    render.vTotalDelta = 0;
+    render.vCheckCount = 0;
     function render(timestamp) {
       requestAnimationFrame(render);
       
@@ -131,6 +132,21 @@ define(['config', 'materials', 'three'], function(config, materials) {return{
       if (!gameOver) {
         animate(delta, runTime);
       }
+
+      render.vTotalDelta += delta;
+      if (render.vCheckCount == 0) {
+        var deltaX = render.lastVLoc == null ? 0 : paddle.position.x - render.lastVLoc.x;
+        var deltaY = render.lastVloc == null ? 0 : paddle.position.y - render.lastVLoc.y;
+
+        paddle.velocity = new THREE.Vector3(
+            10* deltaX / render.vTotalDelta,
+            10*deltaY / render.vTotalDelta,
+            0);
+
+        render.lastVLoc = paddle.position;
+        render.vTotalDelta = 0;
+      }
+      render.vCheckCount = (render.vCheckCount + 1) % 6;
 
       renderer.render(scene, camera);
     }
@@ -170,8 +186,7 @@ define(['config', 'materials', 'three'], function(config, materials) {return{
 
         if (Math.abs(xDiff) < xColl && Math.abs(yDiff) < yColl) {
           ball.velocity.z = -Math.abs(ball.velocity.z);
-          ball.velocity.x += xDiff / 10;
-          ball.velocity.y += yDiff / 10;
+          ball.velocity.add(paddle.velocity);
           ball.velocity.z -= 0.03;
         } else {
           gameOver = true;
