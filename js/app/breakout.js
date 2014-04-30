@@ -1,4 +1,4 @@
-define(['config', 'materials', 'three'], function(config, materials) {return{
+define(['three', 'config', 'materials'], function(THREE, config, materials) {return{
   Game: function() {
     var canvas;
     var scene;
