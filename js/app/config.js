@@ -2,7 +2,7 @@ define({
   cameraDistance: 20,
   
   ball: {
-    initialPosition: [0, 0, -0.6],
+    initialPosition: [0, 0, -0.8],
     initialVelocity: [0.09, 0.06, -0.16]},
   paddle: {
     width: 4,

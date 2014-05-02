@@ -47,7 +47,7 @@ define(['three', 'config', 'materials'], function(THREE, config, materials) {ret
             config.paddle.height,
             0.2),
           materials.glowGlass);
-      paddle.position.z = 0.1;
+      paddle.position.z = -0.1;
       scene.add(paddle);
 
       pulseRing = wireBox(25, 25, materials.whiteLines);
@@ -106,7 +106,7 @@ define(['three', 'config', 'materials'], function(THREE, config, materials) {ret
       var newPosition = new THREE.Vector3(
         Math.max(-maxX, Math.min(x, maxX)),
         Math.max(-maxY, Math.min(y, maxY)),
-        0.1);
+        paddle.position.z);
       paddle.position = newPosition;
     }
 
@@ -180,14 +180,14 @@ define(['three', 'config', 'materials'], function(THREE, config, materials) {ret
       if (ball.position.z <= -39.5) {
         ball.velocity.z = Math.abs(ball.velocity.z);
         ball.position.z = -39.5}
-      if (ball.position.z >= -0.5) {
+      if (ball.position.z >= -0.7) {
         var xDiff = ball.position.x - paddle.position.x;
         var yDiff = ball.position.y - paddle.position.y;
 
         var xColl = (config.paddle.width + 1) / 2;
         var yColl = (config.paddle.width + 1) / 2;
 
-        ball.position.z = -0.5;
+        ball.position.z = -0.7;
 
         if (Math.abs(xDiff) < xColl && Math.abs(yDiff) < yColl) {
           ball.velocity.z = -Math.abs(ball.velocity.z);
@@ -204,7 +204,7 @@ define(['three', 'config', 'materials'], function(THREE, config, materials) {ret
       }
     }
     function updatePulseRing() {
-      var pulseSize = Math.min(1, ((-0.5-ball.position.z) / 40.0) * 4);
+      var pulseSize = Math.min(1, ((-0.7-ball.position.z) / 40.0) * 4);
       if (ball.velocity.z < 0) {pulseSize = 1}
 
       var rLeft = (paddle.position.x - config.paddle.width/2)*(1-pulseSize) - 10.01*pulseSize;
