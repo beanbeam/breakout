@@ -192,7 +192,6 @@ define(['three', 'config', 'materials'], function(THREE, config, materials) {ret
         if (Math.abs(xDiff) < xColl && Math.abs(yDiff) < yColl) {
           ball.velocity.z = -Math.abs(ball.velocity.z);
           ball.velocity.add(paddle.velocity);
-          console.log(paddle.velocity);
           ball.velocity.z -= 0.03;
         } else {
           gameOver = true;
