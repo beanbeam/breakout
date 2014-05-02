@@ -2,18 +2,10 @@ require.config({
   baseUrl: 'js/app',
   paths: {
     'domReady': '../lib/domReady',
-
-    // Threejs with all extensions
-    'three': '../lib/threeShim',
-
-    'threeCore': '../lib/three.min',
-    'deferredRenderer': '../renderers/WebGLDeferredRenderer'
+    'three': '../lib/three',
   },
   shim: {
-    'threeCore': {exports: 'THREE'},
-    'deferredRenderer': {
-      deps: ['threeCore'],
-    }
+    'three': {exports: 'THREE'},
   }
 });
 
