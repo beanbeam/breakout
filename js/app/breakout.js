@@ -37,12 +37,12 @@ define(['three', 'config', 'materials'], function(THREE, config, materials) {ret
     function initObjects() {
       scene.add(new THREE.AmbientLight(0x222222));
       
-      var walls = new THREE.Mesh(new THREE.CubeGeometry(20, 20, 40),
+      var walls = new THREE.Mesh(new THREE.BoxGeometry(20, 20, 40),
           materials.wallMaterial);
       walls.position.set(0, 0, -20);
       scene.add(walls);
     
-      paddle = new THREE.Mesh(new THREE.CubeGeometry(
+      paddle = new THREE.Mesh(new THREE.BoxGeometry(
             config.paddle.width,
             config.paddle.height,
             0.2),
@@ -100,8 +100,8 @@ define(['three', 'config', 'materials'], function(THREE, config, materials) {ret
       var x = (evt.clientX - bounds.left) * 20 / bounds.width - 10;
       var y = (evt.clientY - bounds.top) * -20 / bounds.height + 10;
 
-      var maxX = 10 - paddle.geometry.width / 2;
-      var maxY = 10 - paddle.geometry.height / 2;
+      var maxX = 10 - config.paddle.width / 2;
+      var maxY = 10 - config.paddle.height / 2;
 
       var newPosition = new THREE.Vector3(
         Math.max(-maxX, Math.min(x, maxX)),
@@ -184,8 +184,8 @@ define(['three', 'config', 'materials'], function(THREE, config, materials) {ret
         var xDiff = ball.position.x - paddle.position.x;
         var yDiff = ball.position.y - paddle.position.y;
 
-        var xColl = (paddle.geometry.width + 1) / 2;
-        var yColl = (paddle.geometry.width + 1) / 2;
+        var xColl = (config.paddle.width + 1) / 2;
+        var yColl = (config.paddle.width + 1) / 2;
 
         ball.position.z = -0.5;
 
@@ -207,10 +207,10 @@ define(['three', 'config', 'materials'], function(THREE, config, materials) {ret
       var pulseSize = Math.min(1, ((-0.5-ball.position.z) / 40.0) * 4);
       if (ball.velocity.z < 0) {pulseSize = 1}
 
-      var rLeft = (paddle.position.x - paddle.geometry.width/2)*(1-pulseSize) - 10.01*pulseSize;
-      var rRight = (paddle.position.x + paddle.geometry.width/2)*(1-pulseSize) + 10.01*pulseSize;
-      var rTop = (paddle.position.y + paddle.geometry.height/2)*(1-pulseSize) + 10.01*pulseSize;
-      var rBottom = (paddle.position.y - paddle.geometry.height/2)*(1-pulseSize) - 10.01*pulseSize;
+      var rLeft = (paddle.position.x - config.paddle.width/2)*(1-pulseSize) - 10.01*pulseSize;
+      var rRight = (paddle.position.x + config.paddle.width/2)*(1-pulseSize) + 10.01*pulseSize;
+      var rTop = (paddle.position.y + config.paddle.height/2)*(1-pulseSize) + 10.01*pulseSize;
+      var rBottom = (paddle.position.y - config.paddle.height/2)*(1-pulseSize) - 10.01*pulseSize;
 
       scene.remove(pulseRing);
       pulseRing = wireBox(
