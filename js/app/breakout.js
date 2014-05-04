@@ -30,7 +30,7 @@ define(['three', 'config', 'materials'], function(THREE, config, materials) {ret
     function initCamera(distance) {
       var fov = 360 * Math.atan2(10, distance) / Math.PI;
       var camera = new THREE.PerspectiveCamera(fov, 1, 0.1, 1000);
-      camera.position.z = distance;
+      camera.position.z = distance+config.paddle.thickness;
       return camera;
     }
 
@@ -45,12 +45,13 @@ define(['three', 'config', 'materials'], function(THREE, config, materials) {ret
       paddle = new THREE.Mesh(new THREE.BoxGeometry(
             config.paddle.width,
             config.paddle.height,
-            0.2),
+            config.paddle.thickness),
           materials.glowGlass);
-      paddle.position.z = -0.1;
+      paddle.position.z = config.paddle.thickness/2;
       scene.add(paddle);
 
       pulseRing = wireBox(25, 25, materials.whiteLines);
+      pulseRing.position.z = config.paddle.thickness; 
       scene.add(pulseRing);
 
       ball = newBall();
@@ -71,7 +72,7 @@ define(['three', 'config', 'materials'], function(THREE, config, materials) {ret
     }
 
     function newBall() {
-      var ball = new THREE.Mesh(new THREE.SphereGeometry(0.5, 15, 20),
+      var ball = new THREE.Mesh(new THREE.SphereGeometry(config.ball.radius, 15, 20),
           materials.whitePlasma);
       
       ball.light = new THREE.PointLight(0xdddddd, 1, 15);
@@ -165,29 +166,29 @@ define(['three', 'config', 'materials'], function(THREE, config, materials) {ret
     }
 
     function handleCollisions() {
-      if (ball.position.x <= -9.5) {
+      if (ball.position.x <= -10 + config.ball.radius) {
         ball.velocity.x = Math.abs(ball.velocity.x);
-        ball.position.x = -9.5}
-      if (ball.position.x >= 9.5) {
+        ball.position.x = -10 + config.ball.radius}
+      if (ball.position.x >= 10 - config.ball.radius) {
         ball.velocity.x = -Math.abs(ball.velocity.x);
-        ball.position.x = 9.5}
-      if (ball.position.y <= -9.5) {
+        ball.position.x = 10 - config.ball.radius}
+      if (ball.position.y <= -10 + config.ball.radius) {
         ball.velocity.y = Math.abs(ball.velocity.y);
-        ball.position.y = -9.5}
-      if (ball.position.y >= 9.5) {
+        ball.position.y = -10 + config.ball.radius}
+      if (ball.position.y >= 10 - config.ball.radius) {
         ball.velocity.y = -Math.abs(ball.velocity.y);
-        ball.position.y = 9.5}
-      if (ball.position.z <= -39.5) {
+        ball.position.y = 10 - config.ball.radius}
+      if (ball.position.z <= -40 + config.ball.radius) {
         ball.velocity.z = Math.abs(ball.velocity.z);
-        ball.position.z = -39.5}
-      if (ball.position.z >= -0.7) {
+        ball.position.z = -40 + config.ball.radius}
+      if (ball.position.z >= -config.ball.radius) {
         var xDiff = ball.position.x - paddle.position.x;
         var yDiff = ball.position.y - paddle.position.y;
 
-        var xColl = (config.paddle.width + 1) / 2;
-        var yColl = (config.paddle.width + 1) / 2;
+        var xColl = config.paddle.width / 2 + config.ball.radius;
+        var yColl = config.paddle.width / 2 + config.ball.radius;
 
-        ball.position.z = -0.7;
+        ball.position.z = -config.ball.radius;
 
         if (Math.abs(xDiff) < xColl && Math.abs(yDiff) < yColl) {
           ball.velocity.z = -Math.abs(ball.velocity.z);
@@ -204,7 +205,7 @@ define(['three', 'config', 'materials'], function(THREE, config, materials) {ret
       }
     }
     function updatePulseRing() {
-      var pulseSize = Math.min(1, ((-0.7-ball.position.z) / 40.0) * 4);
+      var pulseSize = Math.min(1, ((-config.ball.radius-ball.position.z) / 40.0) * 4);
       if (ball.velocity.z < 0) {pulseSize = 1}
 
       var rLeft = (paddle.position.x - config.paddle.width/2)*(1-pulseSize) - 10.01*pulseSize;
@@ -217,7 +218,10 @@ define(['three', 'config', 'materials'], function(THREE, config, materials) {ret
           rRight - rLeft,
           rTop - rBottom,
           materials.whiteLines);
-      pulseRing.position.set((rLeft + rRight)/2, (rTop + rBottom)/2, 0);
+      pulseRing.position.set(
+          (rLeft + rRight)/2, 
+          (rTop + rBottom)/2,
+          config.paddle.thickness);
       scene.add(pulseRing);
     }
   }
