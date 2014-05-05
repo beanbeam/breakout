@@ -72,7 +72,10 @@ define(['three', 'config', 'materials'], function(THREE, config, materials) {ret
     }
 
     function newBall() {
-      var ball = new THREE.Mesh(new THREE.SphereGeometry(config.ball.radius, 15, 20),
+      var ball = new THREE.Mesh(new THREE.SphereGeometry(
+            config.ball.radius,
+            config.ball.detailLevel[0],
+            config.ball.detailLevel[1]),
           materials.whitePlasma);
       
       ball.light = new THREE.PointLight(0xdddddd, 1, 15);
