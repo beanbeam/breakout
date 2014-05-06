@@ -3,9 +3,11 @@ require.config({
   paths: {
     'domReady': '../lib/domReady',
     'three': '../lib/three',
+    'cannon': '../lib/cannon'
   },
   shim: {
     'three': {exports: 'THREE'},
+    'cannon': {exports: 'CANNON'}
   }
 });
 
