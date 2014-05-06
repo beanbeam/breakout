@@ -257,7 +257,7 @@ define(['three', 'cannon', 'config', 'renderMaterials', 'physicsMaterials'], fun
     }
 
     function updatePulseRing() {
-      var pulseSize = Math.min(1, ((-config.ball.radius-ball.position.z) / 40.0) * 4);
+      var pulseSize = Math.max(Math.min(1, ((-config.ball.radius-ball.position.z) / 40.0) * 4), 0);
       if (ball.rigidBody.velocity.z < 0) {pulseSize = 1}
 
       var rLeft = (paddle.position.x - config.paddle.width/2)*(1-pulseSize) - 10.01*pulseSize;
