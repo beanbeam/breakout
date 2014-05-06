@@ -10,6 +10,6 @@ define(['three'], function() {return{
     emissive: 0x333333,
     transparent: true,
     opacity: 0.3,
-    side: THREE.DoubleSide}),   
+    side: THREE.DoubleSide}),
   whiteLines: new THREE.LineBasicMaterial({color: 0xffffff})
 }});

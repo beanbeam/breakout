@@ -2,7 +2,7 @@ define(['cannon'], function(CANNON) {
   var ballMaterial = new CANNON.Material();
   var wallMaterial = new CANNON.Material();
   var paddleMaterial = new CANNON.Material();
-  
+
   return {
     ball: ballMaterial,
     wall: wallMaterial,
